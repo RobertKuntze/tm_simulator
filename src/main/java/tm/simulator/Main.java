@@ -1,51 +1,53 @@
 package tm.simulator;
 
-import java.io.FileReader;
-import java.io.Reader;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // Create a tape
-        Tape tape = new Tape(List.of('1', '0', '1', '1', '0', '1').stream().collect(Collectors.toCollection(ArrayList::new)));
         
-        // Create states
-        State q0 = new State("q0");
+        JsonInterpreter jsonInterpreter = new JsonInterpreter();
+
+        State q0 = new State("q0", false, true);
         State q1 = new State("q1");
         State q2 = new State("q2");
         State q3 = new State("q3");
+        State q4 = new State("q4");
+        State q5 = new State("q5");
+        State qf = new State("qf", true, false);
 
-        // Create relations
-        Relation r0 = new Relation(q0, List.of('1'), q1, List.of(new TapeOutput('1', 'R')));
-        Relation r1 = new Relation(q1, List.of('0'), q1, List.of(new TapeOutput('0', 'R')));
-        Relation r2 = new Relation(q1, List.of('1'), q2, List.of(new TapeOutput('1', 'R')));
-        Relation r3 = new Relation(q2, List.of('0'), q2, List.of(new TapeOutput('0', 'R')));
-        Relation r4 = new Relation(q2, List.of('1'), q3, List.of(new TapeOutput('1', 'R')));
 
-        // Add relations to states
-        q0.addRelation(r0);
-        q1.addRelation(r1);
-        q1.addRelation(r2);
-        q2.addRelation(r3);
-        q2.addRelation(r4);
+        q0.newRelation(q1, ' ', 'a', 'R');
+        q1.newRelation(qf, ' ', 'b', 'N');
+        q2.newRelation(q2, 'b', 'b', 'L');
+        q2.newRelation(q3, 'a', 'a', 'R');
+        q3.newRelation(q4, 'b', 'a', 'R');
+        q4.newRelation(q4, 'b', 'b', 'R');
+        q4.newRelation(q5, ' ', 'b', 'R');
+        q5.newRelation(qf, ' ', 'b', 'N');
+        qf.newRelation(q2, 'b', 'b', 'N');
 
-        // TuringMachine tm = new TuringMachine(q0, List.of(q3), List.of(tape));
-        // tm.run();
 
-        JsonInterpreter jsonInterpreter = new JsonInterpreter();
-        jsonInterpreter.addState(q0);   
-        jsonInterpreter.addState(q1);
-        jsonInterpreter.addState(q2);
-        jsonInterpreter.addState(q3);
+        List<State> states = new ArrayList<State>();
+        states.add(q0);
+        states.add(q1);
+        states.add(q2);
+        states.add(q3);
+        states.add(q4);
+        states.add(q5);
+        states.add(qf);
 
-        jsonInterpreter.readJson();
-        
+        // JSONObject json = jsonInterpreter.readJson("src/main/java/tm/simulator/data.json");
+        // List<State> states = jsonInterpreter.getStatesFromJson(json);
+
+        jsonInterpreter.writeJson("src/main/java/tm/simulator/data.json", jsonInterpreter.createJson(states));
+
+        TuringMachine tm = new TuringMachine(states);
+
+        tm.runAsGenerator(3);
     }
 }

@@ -16,6 +16,13 @@ public class Relation {
         this.tapeOutputs = tapeOutputs;
     }
 
+    public Relation(State currentState, Character inputCharacter, State nextState, Character tapeOutput, Character move) {
+        this.currentState = currentState;
+        this.inputCharacter = List.of(inputCharacter);
+        this.nextState = nextState;
+        this.tapeOutputs = List.of(new TapeOutput(tapeOutput, move));
+    }
+
     public String toString() {
         return currentState + " -> " + nextState + " : " + inputCharacter + " -> " + tapeOutputs;
     }

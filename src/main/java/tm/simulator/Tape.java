@@ -12,6 +12,9 @@ public class Tape {
     }
 
     public Character read() {
+        if (tape.size() <= headPosition) {
+            tape.add(' ');
+        }
         return tape.get(headPosition);
     }
 
