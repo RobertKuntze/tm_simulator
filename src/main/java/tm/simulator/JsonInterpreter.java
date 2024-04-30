@@ -13,6 +13,13 @@ import org.json.simple.parser.JSONParser;
 public class JsonInterpreter {
     JSONParser parser = new JSONParser();
 
+    /*
+     * Creates a JSON object from a list of State objects.
+     * 
+     * @param states The list of State objects to create a JSON object from.
+     * @return The JSON object created from the list of State objects.
+     */
+    @SuppressWarnings("unchecked")
     public JSONObject createJson(List<State> states){
         JSONObject json = new JSONObject();
         for (State state : states) {
@@ -43,6 +50,12 @@ public class JsonInterpreter {
         return json;
     }
 
+    /*
+     * Writes a JSON object to a file.
+     * 
+     * @param path The path to the file to write to.
+     * @param json The JSON object to write to the file.
+     */
     public void writeJson(String path, JSONObject json){
         try {
             FileWriter file = new FileWriter(path);
@@ -54,6 +67,12 @@ public class JsonInterpreter {
         }
     }
 
+    /*
+     * Reads a JSON file and returns a JSON object.
+     * 
+     * @param path The path to the JSON file.
+     * @return The JSON object read from the file or null in case the path does not contain a json file.
+     */
     public JSONObject readJson(String path){
         try {
             Reader reader = new FileReader(path);
@@ -67,6 +86,13 @@ public class JsonInterpreter {
         return null;
     }
 
+    
+    /**
+     * Parses a JSON object and returns a list of State objects.
+     *
+     * @param json The JSON object to parse.
+     * @return A list of State objects extracted from the JSON.
+     */
     public List<State> getStatesFromJson(JSONObject json){
         List<State> result = new ArrayList<State>();
         State currentState = null;

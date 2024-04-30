@@ -1,9 +1,6 @@
 package tm.simulator;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-import org.json.simple.JSONObject;
 
 import java.util.List;
 
